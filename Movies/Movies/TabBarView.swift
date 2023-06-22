@@ -14,6 +14,11 @@ struct TabBarView: View {
                 .tabItem{
                     Label("Recherche", systemImage: "magnifyingglass")
                 }
+            FavorisView()
+                .tabItem{
+                    Label("Favoris", systemImage: "bookmark")
+                }
+            
         }.accentColor(Color("myColor"))
     }
 }
