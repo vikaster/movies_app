@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SearchView: View {
     @State var text : String = ""
+    @EnvironmentObject var movieVM: MovieSearchViewModel
     var body: some View {
         VStack(alignment: .center, spacing: 50) {
             Text("Recherches").font(.custom("Graphik", size: 32)).bold()
@@ -25,8 +26,13 @@ struct SearchView: View {
             .frame(maxWidth: 348, minHeight: 48)
             .cornerRadius(10).background(.gray)
             .padding(.bottom, 10)
-                
+            
+            
+            
             Button(action: {
+                Task {
+                    await movieVM.fetchMovies()
+                }
                 
             }, label: {
                 Text("Valider")
@@ -40,5 +46,6 @@ struct SearchView: View {
 struct SearchView_Previews: PreviewProvider {
     static var previews: some View {
         SearchView()
+            .environmentObject(MovieSearchViewModel())
     }
 }
