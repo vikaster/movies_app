@@ -13,32 +13,8 @@ struct SearchView: View {
     @EnvironmentObject var movieVM: MovieSearchViewModel
     var body: some View {
         VStack(alignment: .center, spacing: 50) {
-            HStack{
-                TextField("Rechercher un film, un acteur, une actrice...", text:$text)
-                    .font(.custom("Graphik compact", size: 14))
-                    .padding([.top, .leading], 10)
-                    .textSelection(.enabled)
-                    .background(.white)
-                    .cornerRadius(50)
-                    .frame(maxWidth: .infinity, minHeight:22, maxHeight:22)
-                Button(action: {
-                    // action
-                    
-                }, label: {
-                    Image(systemName: "magnifyingglass")
-                        .foregroundColor(.black)
-                        .font(.custom("Graphik compact", size: 24))
-                }).buttonStyle(.plain)
-            }
-            .padding()
-            .frame(maxWidth: 348, minHeight: 48)
-            .cornerRadius(10).background(.gray)
-            .padding(.bottom, 10)
-            .onAppear {
-                Task{
-                    await movieVM.fetchMovies()
-                }
-            }
+            
+            AddSearchBar(text:text)
             Text("Movies")
                     .font(.largeTitle)
                 if let movies = movieVM.movieDetails {
