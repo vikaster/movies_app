@@ -8,23 +8,27 @@
 import Foundation
 
 struct MovieResponse: Codable {
-    let records: [Record]
+    let records: [AirTableSecondFloor]
     
-    var movies: [Movie] {
+    var movies: [JSONInfo] {
         return records.map { rec in
-            var movie = rec.fields
-            movie.id = rec.id ?? "EF12030JF320"
-                    return movie
+            var record = rec.fields
+            record.id = rec.id ?? "EF12030JF320"
+            print(record)
+            return record
                 //}
         }
     }
     
-    enum CodingKeys: String, CodingKey {
-        case records
-    }
+//    enum CodingKeys: String, CodingKey {
+//        case records
+//    }
 }
 
-struct Record: Codable, Identifiable {
-    var id: String?
-    var fields: Movie
+struct AirTableSecondFloor: Codable, Identifiable {
+    
+    var id: String
+    //let createdTime: String
+    let fields: JSONInfo
+        
 }

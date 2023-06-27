@@ -7,12 +7,9 @@
 
 import Foundation
 
-struct Movie: Identifiable, Codable {
+struct JSONInfo: Codable {
     var id: String
-    var title: String
-    var year: String
-    var moviemaker: String
-    var actors: [String]
-    
-    
+    let title: String
+    let year: String
+    let actors: [String]
 }
