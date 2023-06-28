@@ -9,19 +9,21 @@ import SwiftUI
 
 struct AddSearchBar: View {
     @EnvironmentObject var movieVM: MovieSearchViewModel
-    @State var text = ""
+    @Binding var textContent: String
+    @Binding var btnSate: Bool
     var movies: [AirTableSecondFloor]?
     var body: some View {
         HStack{
-            TextField("Rechercher un film, un acteur, une actrice...", text:$text)
-                .font(.custom("Graphik compact", size: 14))
+            TextField("Rechercher un film, un acteur, une actrice...", text:$textContent)
+                .font(.custom("Graphik compact", size: 24))
                 .padding([.top, .leading], 10)
                 .textSelection(.enabled)
                 .background(.white)
                 .cornerRadius(50)
-                .frame(maxWidth: .infinity, minHeight:22, maxHeight:22)
+                .frame(maxWidth: .infinity, minHeight:28, maxHeight:28)
                 .onSubmit {
                     //action
+                    self.btnSate.toggle()
                 }
             Button(action: {
                 Task{
@@ -31,7 +33,7 @@ struct AddSearchBar: View {
             }, label: {
                 Image(systemName: "magnifyingglass")
                     .foregroundColor(.black)
-                    .font(.custom("Graphik compact", size: 24))
+                    .shadow(color: .black, radius:1)
             }).buttonStyle(.plain)
         }
         .padding()
@@ -48,6 +50,6 @@ struct AddSearchBar: View {
 
 struct AddSearchBar_Previews: PreviewProvider {
     static var previews: some View {
-        AddSearchBar()
+        AddSearchBar(textContent: .constant(""), btnSate: .constant(false))
     }
 }

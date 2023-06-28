@@ -20,43 +20,50 @@ class MovieSearchViewModel: ObservableObject {
         
         do {
             let (data, _) = try await URLSession.shared.data(for: request)
-                let decoder = JSONDecoder()
-                decoder.dateDecodingStrategy = .iso8601
-                do {
-                    // Enregistre AirtableSearchResult dans les données capturées dans self.movieDetails
-                    let AirtableSearchResult = try decoder.decode(MovieResponse.self, from: data)
-//                    print(type(of: AirtableSearchResult))
-//                    print(AirtableSearchResult)
-                    self.movieDetails = AirtableSearchResult.records
-                    
-                }catch{
-                    print(error)
-                }
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            do {
+                // Enregistre AirtableSearchResult dans les données capturées dans self.movieDetails
+                let AirtableSearchResult = try decoder.decode(MovieResponse.self, from: data)
+                print(type(of: AirtableSearchResult))
+                self.movieDetails = AirtableSearchResult.records
+                
+            }catch{
+                print(error)
+            }
         } catch{
             print("data invalid")
         }
     }
+    struct Record: Codable {
+        let records: [AirTableSecondFloor]
+    }
     
+    // func for add a Movie
     func addMovie() async {
-        let movie = AirTableSecondFloor(id: "123456", fields: JSONInfo(id: "1123", title: "Terminator Genisys", year: "2015", actors: ["Emilia Clark"]))
         
+        var movieDetail = AirTableSecondFloor(fields: JSONInfo(title: "Astérix et les jeux olympiques", year: "2008"))
+        print(movieDetail)
         let apikey = ""
-        if let url = URL(string: "https://api.airtable.com/v0/appTT0t4FupHVTbOf/tbl2qpwiUFVeocVFW"){
+        if let url = URL(string: "https://api.airtable.com/v0/appTT0t4FupHVTbOf/movies"){
             do {
                 var request = URLRequest(url: url)
                 request.httpMethod = "POST"
                 request.setValue("Bearer \(apikey)", forHTTPHeaderField: "Authorization")
                 request.setValue("application/json", forHTTPHeaderField: "Content-Type")
                 
-                let jsonMovie = try JSONEncoder().encode(movie)
+                let jsonMovie = try JSONEncoder().encode(movieDetail)
                 
                 request.httpBody = jsonMovie
-                //print(jsonMovie)
-                
-                let (_, response) = try await URLSession.shared.data(for: request)
-                
+                // for debug
+                if let Jdata = try JSONSerialization.jsonObject(with: jsonMovie) as? [String:Any]{
+                    print("Encoded Data \(Jdata)")
+                }
+                // handle response
+                let (data, response) = try await URLSession.shared.data(for: request)
                 if let response = response as? HTTPURLResponse, response.statusCode == 200 {
                     print("All OK")
+                    // update movies list
                     await fetchMovies()
                 }
             } catch {
@@ -64,7 +71,7 @@ class MovieSearchViewModel: ObservableObject {
             }
         }
     }
+    
+    
+    
 }
-            
-
-

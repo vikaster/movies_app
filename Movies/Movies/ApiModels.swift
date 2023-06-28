@@ -13,7 +13,7 @@ struct MovieResponse: Codable {
     var movies: [JSONInfo] {
         return records.map { rec in
             var record = rec.fields
-            record.id = rec.id ?? "EF12030JF320"
+            //record.id = rec.id ?? "EF12030JF320"
             print(record)
             return record
                 //}
@@ -27,7 +27,7 @@ struct MovieResponse: Codable {
 
 struct AirTableSecondFloor: Codable, Identifiable {
     
-    var id: String
+    var id: String?
     //let createdTime: String
     let fields: JSONInfo
         

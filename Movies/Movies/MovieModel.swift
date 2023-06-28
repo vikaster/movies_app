@@ -8,8 +8,8 @@
 import Foundation
 
 struct JSONInfo: Codable {
-    var id: String
+    var id: String?
     let title: String
     let year: String
-    let actors: [String]
+    //let actors: [String]
 }
