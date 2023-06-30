@@ -25,9 +25,10 @@ class MovieSearchViewModel: ObservableObject {
             decoder.dateDecodingStrategy = .iso8601
             do {
                 // Enregistre AirtableSearchResult dans les données capturées dans self.movieDetails
-                let AirtableSearchResult = try decoder.decode(MovieResponse.self, from: data)
-                print(type(of: AirtableSearchResult))
-                self.movieDetails = AirtableSearchResult.records
+                if let AirtableSearchResult = try decoder.decode(MovieResponse?.self, from: data){
+                    print(type(of: AirtableSearchResult))
+                    self.movieDetails = AirtableSearchResult.records
+                }
                 
             }catch{
                 print(error)

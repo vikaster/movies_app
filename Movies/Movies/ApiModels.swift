@@ -14,15 +14,11 @@ struct MovieResponse: Codable {
         return records.map { rec in
             var record = rec.fields
             //record.id = rec.id ?? "EF12030JF320"
-            print(record)
             return record
                 //}
         }
     }
     
-//    enum CodingKeys: String, CodingKey {
-//        case records
-//    }
 }
 
 struct AirTableSecondFloor: Codable, Identifiable {

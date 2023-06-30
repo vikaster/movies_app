@@ -10,26 +10,25 @@ import SwiftUI
 struct AddSearchBar: View {
     @EnvironmentObject var movieVM: MovieSearchViewModel
     @Binding var textContent: String
-    @Binding var btnSate: Bool
+    @Binding var btnState: Bool
     var body: some View {
         HStack{
             TextField("Rechercher un film, un acteur, une actrice...", text:$textContent)
                 .font(.custom("Graphik compact", size: 24))
                 .padding([.top, .leading], 10)
                 .textSelection(.enabled)
-                .background(.white)
-                .cornerRadius(50)
-                .frame(maxWidth: .infinity, minHeight:28, maxHeight:28)
-                .onSubmit {
-                    //action
+                .foregroundColor(.gray)
+                .frame(maxWidth: .infinity, minHeight:28, maxHeight:28).onSubmit {
+                    // récupère un tableau de movies en fonction du contenu de mon textField
                     Task{
                         await movieVM.searchMovies(movieToSearch: textContent)
                     }
-                    self.btnSate.toggle()
+                    // affiche la liste des résultats
+                    self.btnState.toggle()
                 }
             Button(action: {
-                // do nothing
-                self.btnSate.toggle()
+                // action : affiche la liste des résultats
+                self.btnState.toggle()
                 
             }, label: {
                 Image(systemName: "magnifyingglass")
@@ -37,9 +36,10 @@ struct AddSearchBar: View {
                     .shadow(color: .black, radius:1)
             }).buttonStyle(.plain)
         }
-        .padding()
+        .padding(24)
+        .background(Color(.systemGray6))
         .frame(maxWidth: 348, minHeight: 48)
-        .cornerRadius(10).background(.gray)
+        .cornerRadius(10)
         .padding(.bottom, 10)
         .onAppear {
             Task{
@@ -51,6 +51,6 @@ struct AddSearchBar: View {
 
 struct AddSearchBar_Previews: PreviewProvider {
     static var previews: some View {
-        AddSearchBar(textContent: .constant(""), btnSate: .constant(false))
+        AddSearchBar(textContent: .constant(""), btnState: .constant(false))
     }
 }
