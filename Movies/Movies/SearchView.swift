@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SearchView: View {
+    @State var movieSearched: [AirTableSecondFloor]? = []
     @State var textContent: String = "Movie"
     @State var btnclick:Bool = false
     var movies: [AirTableSecondFloor]? = [AirTableSecondFloor(fields: JSONInfo(title: "Asterix", year: "2000"))]
@@ -19,14 +20,15 @@ struct SearchView: View {
             
             NavigationLink(destination:{
                 AddSearchBar(textContent: $textContent, btnSate:$btnclick)
+                // if btnclick then view searchList
                 if(btnclick){
-                    SearchResults(movieVM: movieVM)
+                    SearchResults(textToSearch: $textContent)
                 }}, label: {
                 VStack{
                     ZStack{
                         RoundedRectangle(cornerRadius: 10).stroke()
                             .foregroundColor(.gray).frame(width:299, height:48).padding(10)
-                        Text(textContent).foregroundColor(.mint)
+                        Text("Search movies").foregroundColor(.mint)
                                 .font(.largeTitle)
                     }
                 }
@@ -44,24 +46,32 @@ struct SearchView: View {
 }
 
 struct SearchResults: View {
-    var movieVM: MovieSearchViewModel
+    @Binding var textToSearch: String
+    @EnvironmentObject var movieVM: MovieSearchViewModel
+    var movies: [AirTableSecondFloor]?
     var body: some View{
-        
-        if let movies = movieVM.movieDetails {
-            List(movies){ movie in
-                HStack{
-                    Text(movie.fields.title)
-                        .font(.title)
-                    Text(movie.fields.year)
-                        .font(.title2)
-                    //Text(String(movie.fields.actors.first!))
-                }.padding()
-                    .frame(maxWidth: 348, minHeight: 48)
-                    .cornerRadius(10).background(.gray)
-                    .padding(.bottom, 10)
+        VStack{
+            if let movies = movieVM.movieSearched{
+                List(movies){ movie in
+                    HStack{
+                        Text(movie.fields.title)
+                            .font(.title)
+                        Text(movie.fields.year)
+                            .font(.title2)
+                        //Text(String(movie.fields.actors.first!))
+                    }.padding()
+                        .frame(maxWidth: 348, minHeight: 48)
+                        .cornerRadius(10).background(.gray)
+                        .padding(.bottom, 10)
+                }
+                .navigationTitle("Search results").navigationBarTitleDisplayMode(.large)
             }
-            .navigationTitle("Search results").navigationBarTitleDisplayMode(.large)
         }
+        .onAppear{
+            Task{
+                await movieVM.searchMovies(movieToSearch: textToSearch)
+            }
+       }
     }
 }
     

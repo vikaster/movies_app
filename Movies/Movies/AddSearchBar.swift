@@ -11,7 +11,6 @@ struct AddSearchBar: View {
     @EnvironmentObject var movieVM: MovieSearchViewModel
     @Binding var textContent: String
     @Binding var btnSate: Bool
-    var movies: [AirTableSecondFloor]?
     var body: some View {
         HStack{
             TextField("Rechercher un film, un acteur, une actrice...", text:$textContent)
@@ -23,12 +22,14 @@ struct AddSearchBar: View {
                 .frame(maxWidth: .infinity, minHeight:28, maxHeight:28)
                 .onSubmit {
                     //action
+                    Task{
+                        await movieVM.searchMovies(movieToSearch: textContent)
+                    }
                     self.btnSate.toggle()
                 }
             Button(action: {
-                Task{
-                    await movieVM.addMovie()
-                }
+                // do nothing
+                self.btnSate.toggle()
                 
             }, label: {
                 Image(systemName: "magnifyingglass")
